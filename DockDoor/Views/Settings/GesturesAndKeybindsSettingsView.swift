@@ -218,12 +218,7 @@ struct GesturesAndKeybindsSettingsView: View {
                     range: 20 ... 100,
                     step: 10,
                     unit: "px",
-                    formatter: {
-                        let f = NumberFormatter()
-                        f.minimumFractionDigits = 0
-                        f.maximumFractionDigits = 0
-                        return f
-                    }()
+                    formatter: NumberFormatter.integerFormatter
                 )
                 Text("Lower values make gestures more sensitive. Higher values require longer swipes. Applies to both dock previews and window switcher.")
                     .font(.caption)

@@ -155,6 +155,10 @@ final class WindowLiveCapture: ObservableObject {
     private var stopGeneration = 0
     private(set) var lastFrame: CGImage?
 
+    // Throttle UI publishes to avoid saturating the main thread (default to 10 FPS)
+    private var lastPublishedAt: Date = .distantPast
+    private let minPublishInterval: TimeInterval = 1.0 / 10.0
+
     init(windowID: CGWindowID, quality: LivePreviewQuality, frameRate: LivePreviewFrameRate) {
         self.windowID = windowID
         self.quality = quality
@@ -237,8 +241,15 @@ final class WindowLiveCapture: ObservableObject {
 
             let output = StreamOutput { [weak self] image in
                 Task { @MainActor in
-                    self?.lastFrame = image
-                    self?.capturedImage = image
+                    guard let self else { return }
+                    self.lastFrame = image
+                    let now = Date()
+                    if now.timeIntervalSince(self.lastPublishedAt) >= self.minPublishInterval {
+                        self.capturedImage = image
+                        self.lastPublishedAt = now
+                    } else {
+                        // Skip UI publish; lastFrame will hold the newest frame to be used when next publish is allowed
+                    }
                 }
             }
 

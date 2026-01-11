@@ -286,7 +286,6 @@ extension WindowInfo {
 
     func bringToFront() {
         let maxRetries = 3
-        var retryCount = 0
 
         func attemptActivation() -> Bool {
             do {
@@ -301,7 +300,7 @@ extension WindowInfo {
 
                 return true
             } catch {
-                print("Attempt \(retryCount + 1) failed to bring window to front: \(error)")
+                print("Attempt failed to bring window to front: \(error)")
                 if error is AxError {
                     WindowUtil.removeWindowFromDesktopSpaceCache(with: id, in: app.processIdentifier)
                 }
@@ -309,18 +308,21 @@ extension WindowInfo {
             }
         }
 
-        while retryCount < maxRetries {
-            if attemptActivation() {
-                WindowUtil.updateTimestampOptimistically(for: self)
-                return
+        // Perform retries asynchronously to avoid blocking the main thread
+        Task { @MainActor in
+            for retry in 0 ..< maxRetries {
+                if attemptActivation() {
+                    WindowUtil.updateTimestampOptimistically(for: self)
+                    return
+                }
+                if retry < maxRetries - 1 {
+                    // Sleep without blocking the main thread
+                    try? await Task.sleep(nanoseconds: 50_000_000)
+                }
             }
-            retryCount += 1
-            if retryCount < maxRetries {
-                usleep(50000)
-            }
-        }
 
-        print("Failed to bring window to front after \(maxRetries) attempts")
+            print("Failed to bring window to front after \(maxRetries) attempts")
+        }
     }
 
     func close() {

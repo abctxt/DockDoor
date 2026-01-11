@@ -915,7 +915,7 @@ struct MainSettingsView: View {
                                                 livePreviewStreamKeepAlive = newValue
                                             }
                                         }
-                                    ), formatter: NumberFormatter())
+                                    ), formatter: NumberFormatter.integerFormatter)
                                         .textFieldStyle(.roundedBorder)
                                         .frame(width: 40)
                                         .multilineTextAlignment(.center)
@@ -1001,7 +1001,7 @@ struct MainSettingsView: View {
                     }
                     Toggle(isOn: $enableCmdRightClickQuit) { Text("CMD + Right Click on dock icon to quit app") }
 
-                    sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: { let f = NumberFormatter(); f.allowsFloats = false; f.minimumIntegerDigits = 1; f.maximumFractionDigits = 0; return f }())
+                    sliderSetting(title: "Window Buffer from Dock (pixels)", value: $bufferFromDock, range: -100 ... 100, step: 5, unit: "px", formatter: NumberFormatter.integerFormatter)
                 }
             }
             StyledGroupBox(label: "Active App Indicator") {
