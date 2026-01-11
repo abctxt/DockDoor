@@ -1,4 +1,4 @@
-# Issues and Performance Recommendations 🚨
+# Issues and Performance Recommendations
 
 This document summarizes potential performance problems I found in the codebase, the reason they're risky, and concrete, prioritized remediation steps with example snippets you can apply immediately.
 
@@ -124,27 +124,6 @@ if query.count <= 1 { return target.contains(query) }
 ### 7) Misc / scheduling bursts — LOW
 - Files: many places use `DispatchQueue.main.asyncAfter` for short delays (0.08s–0.2s); fine in many cases but can create bursts.
 - Suggestion: Use cancelable `Task` flows where possible, coalesce, and avoid scheduling during rapid input events.
-
----
-
-## Prioritization & Immediate action plan ✅
-1. Fix blocking `usleep` in `bringToFront()` (HIGH) — quick win and critical for responsiveness.
-2. Replace `NumberFormatter()` allocations with static/shared formatters in Settings views (MEDIUM) — low-risk change.
-3. Throttle `capturedImage` publishes in `WindowLiveCapture` (MEDIUM/HIGH) — measure impact.
-4. Cache or prefetch AX properties in `WindowUtil` loops (MEDIUM).
-5. Add debounce/short-circuit to string matching and consider memoization/profiling (LOW/MEDIUM).
-6. Move expensive image ops off the main thread and/or cache them (MEDIUM).
-7. Profile with Instruments (CPU, Main Thread, Core Animation) to confirm before larger refactors.
-
----
-
-## Next steps I can take for you
-- Implement the `bringToFront` async retry fix and submit a small PR. ✅
-- Replace ad-hoc `NumberFormatter` allocations in `Views/Settings` with shared formatters. ✅
-- Add throttling to `WindowLiveCapture` to limit UI publish rate to configurable FPS (e.g., 10 FPS). ✅
-- Run a follow-up profiling session to measure CPU and UI improvements.
-
-Tell me which one you want me to implement first and I'll open a focused PR with small, well-tested changes.
 
 ---
 
