@@ -71,12 +71,7 @@ struct ActiveAppIndicatorSettingsView: View {
                             range: 1.0 ... 15.0,
                             step: 1,
                             unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                return f
-                            }()
+                            formatter: NumberFormatter.integerFormatter
                         )
                         .padding(.leading, 40)
 
@@ -86,13 +81,7 @@ struct ActiveAppIndicatorSettingsView: View {
                             range: -30.0 ... 30.0,
                             step: 1.0,
                             unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                f.positivePrefix = "+"
-                                return f
-                            }()
+                            formatter: NumberFormatter.signedIntegerFormatter
                         )
                         .padding(.leading, 40)
                     }
@@ -109,12 +98,7 @@ struct ActiveAppIndicatorSettingsView: View {
                             range: 1.0 ... 110.0,
                             step: 1.0,
                             unit: "px",
-                            formatter: {
-                                let f = NumberFormatter()
-                                f.minimumFractionDigits = 0
-                                f.maximumFractionDigits = 0
-                                return f
-                            }()
+                            formatter: NumberFormatter.integerFormatter
                         )
                         .padding(.leading, 40)
                     }
@@ -125,13 +109,7 @@ struct ActiveAppIndicatorSettingsView: View {
                         range: -2.0 ... 2.0,
                         step: 1.0,
                         unit: "px",
-                        formatter: {
-                            let f = NumberFormatter()
-                            f.minimumFractionDigits = 0
-                            f.maximumFractionDigits = 0
-                            f.positivePrefix = "+"
-                            return f
-                        }()
+                        formatter: NumberFormatter.signedIntegerFormatter
                     )
                     .padding(.leading, 20)
 

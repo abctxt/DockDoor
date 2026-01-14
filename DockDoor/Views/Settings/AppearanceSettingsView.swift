@@ -235,12 +235,7 @@ struct AppearanceSettingsView: View {
                                           range: 0.5 ... 2.0,
                                           step: 0.1,
                                           unit: "×",
-                                          formatter: {
-                                              let f = NumberFormatter()
-                                              f.minimumFractionDigits = 1
-                                              f.maximumFractionDigits = 1
-                                              return f
-                                          }())
+                                          formatter: NumberFormatter.oneDecimalFormatter)
 
                             sliderSetting(title: "Unselected Content Opacity",
                                           value: $unselectedContentOpacity,
@@ -544,12 +539,7 @@ struct AppearanceSettingsView: View {
                               range: 1.0 ... 8.0,
                               step: 1.0,
                               unit: "",
-                              formatter: {
-                                  let f = NumberFormatter()
-                                  f.minimumFractionDigits = 0
-                                  f.maximumFractionDigits = 0
-                                  return f
-                              }())
+                              formatter: NumberFormatter.integerFormatter)
 
                 let previewMaxColumnsBinding = Binding<Double>(
                     get: { Double(previewMaxColumns) },
@@ -560,12 +550,7 @@ struct AppearanceSettingsView: View {
                               range: 1.0 ... 8.0,
                               step: 1.0,
                               unit: "",
-                              formatter: {
-                                  let f = NumberFormatter()
-                                  f.minimumFractionDigits = 0
-                                  f.maximumFractionDigits = 0
-                                  return f
-                              }())
+                              formatter: NumberFormatter.integerFormatter)
 
                 Text(String(localized: "Controls how many rows/columns of windows are shown in dock previews. Only the relevant setting applies based on dock position."))
                     .font(.caption)
@@ -653,12 +638,7 @@ struct AppearanceSettingsView: View {
                               range: 1.0 ... 8.0,
                               step: 1.0,
                               unit: "",
-                              formatter: {
-                                  let f = NumberFormatter()
-                                  f.minimumFractionDigits = 0
-                                  f.maximumFractionDigits = 0
-                                  return f
-                              }())
+                              formatter: NumberFormatter.integerFormatter)
 
                 Text(String(localized: "Controls how many rows of windows are shown in the window switcher. Windows are distributed across rows automatically."))
                     .font(.caption)
@@ -978,12 +958,7 @@ struct AppearanceSettingsView: View {
                     range: 100.0 ... 600.0,
                     step: 10.0,
                     unit: "px",
-                    formatter: {
-                        let f = NumberFormatter()
-                        f.minimumFractionDigits = 0
-                        f.maximumFractionDigits = 0
-                        return f
-                    }()
+                    formatter: NumberFormatter.integerFormatter
                 )
                 .onChange(of: previewWidth) { _ in
                     if lockAspectRatio {
@@ -998,12 +973,7 @@ struct AppearanceSettingsView: View {
                     range: 60.0 ... 400.0,
                     step: 10.0,
                     unit: "px",
-                    formatter: {
-                        let f = NumberFormatter()
-                        f.minimumFractionDigits = 0
-                        f.maximumFractionDigits = 0
-                        return f
-                    }()
+                    formatter: NumberFormatter.integerFormatter
                 )
                 .disabled(lockAspectRatio)
                 .onChange(of: previewHeight) { _ in
